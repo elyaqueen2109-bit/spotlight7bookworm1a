@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bookworms — Spotlight 7, Module 2a</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Kalam:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #f5f0e8; --beige: #ebe2d3; --sepia: #a67c52;
+    --sepia-dark: #8b6f47; --brown: #4a3728; --ink: #1a1a1a;
+    --red: #8b2f2f; --white: #ffffff; --green: #4a7a4a;
+  }
+  body {
+    font-family: 'Crimson Text', Georgia, serif;
+    background: var(--cream);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(166,124,82,0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(139,111,71,0.08) 0%, transparent 50%);
+    min-height: 100vh; padding: 30px 15px; color: var(--ink);
+  }
+  .container {
+    max-width: 920px; margin: 0 auto;
+    background: var(--white); border-radius: 4px;
+    padding: 40px 35px;
+    box-shadow: 0 2px 4px rgba(74,55,40,0.1), 0 15px 40px rgba(74,55,40,0.15);
+    position: relative;
+  }
+  .container::before {
+    content: ''; position: absolute; top: -14px; left: 40px;
+    width: 130px; height: 30px;
+    background: repeating-linear-gradient(45deg, rgba(166,124,82,0.7) 0 6px, rgba(217,200,169,0.85) 6px 12px);
+    transform: rotate(-3deg); box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  }
+  header {
+    text-align: center; margin-bottom: 25px;
+    padding-bottom: 20px; border-bottom: 2px dashed var(--sepia);
+    position: relative;
+  }
+  h1 {
+    font-family: 'Caveat', cursive; color: var(--brown);
+    font-size: 64px; line-height: 1; margin-bottom: 8px;
+  }
+  .subtitle {
+    font-family: 'Special Elite', monospace; color: var(--sepia-dark);
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+  }
+  .header-actions {
+    position: absolute; top: 15px; right: 15px;
+    display: flex; gap: 10px; align-items: center;
+  }
+  .sound-toggle {
+    background: var(--cream); border: 2px solid var(--sepia);
+    border-radius: 50%; width: 44px; height: 44px;
+    font-size: 20px; cursor: pointer; transition: all 0.2s;
+  }
+  .sound-toggle:hover { background: var(--beige); transform: scale(1.08); }
+  .sound-toggle.muted { opacity: 0.5; }
+  .pdf-btn {
+    background: var(--brown); color: var(--cream);
+    border: none; padding: 10px 18px; border-radius: 4px;
+    font-family: 'Special Elite', monospace;
+    font-size: 12px; letter-spacing: 1.5px;
+    text-transform: uppercase; cursor: pointer;
+    box-shadow: 2px 2px 0 var(--sepia); transition: all 0.2s;
+  }
+  .pdf-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 var(--sepia); }
+  .progress-wrap { margin: 20px 0; text-align: center; }
+  .progress-bar {
+    height: 6px; background: var(--beige);
+    border-radius: 3px; overflow: hidden; margin-bottom: 8px;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--sepia), var(--brown));
+    width: 0%; transition: width 0.6s ease;
+  }
+  .progress-text {
+    font-family: 'Special Elite', monospace;
+    font-size: 12px; color: var(--sepia-dark);
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .section { display: none; animation: fadeIn 0.6s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  h2 {
+    font-family: 'Caveat', cursive; color: var(--brown);
+    font-size: 42px; margin-bottom: 5px; line-height: 1;
+  }
+  .section-label {
+    font-family: 'Special Elite', monospace;
+    color: var(--sepia-dark); font-size: 12px;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 20px; display: block;
+  }
+  p { font-size: 18px; line-height: 1.7; margin-bottom: 12px; color: #2d2418; }
+  .task-card {
+    background: var(--cream); border: 1px solid var(--sepia);
+    border-radius: 4px; padding: 25px; margin: 20px 0;
+    position: relative;
+  }
+  .task-card::before {
+    content: ''; position: absolute; top: -8px; right: 20px;
+    width: 60px; height: 18px;
+    background: repeating-linear-gradient(-45deg, rgba(139,47,47,0.75) 0 5px, rgba(217,200,169,0.9) 5px 10px);
+    transform: rotate(4deg);
+  }
+  .question-text {
+    font-family: 'Caveat', cursive; font-size: 30px;
+    color: var(--brown); margin-bottom: 20px; line-height: 1.2;
+  }
+  .options {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 15px; margin: 20px 0;
+  }
+  @media (max-width: 600px) { .options { grid-template-columns: 1fr; } }
+  .option-btn {
+    background: var(--white); border: 2px solid var(--sepia);
+    border-radius: 4px; padding: 20px 15px;
+    font-family: 'Crimson Text', serif;
+    font-size: 18px; color: var(--brown);
+    cursor: pointer; transition: all 0.25s;
+    text-align: center; box-shadow: 2px 2px 0 var(--beige);
+    position: relative;
+  }
+  .option-btn:hover {
+    background: var(--beige); transform: translateY(-2px);
+    box-shadow: 3px 4px 0 var(--sepia);
+  }
+  .option-btn.correct { background: #d4e8d4; border-color: var(--green); color: #2d4d2d; }
+  .option-btn.correct::after {
+    content: '✓'; position: absolute; top: 8px; right: 12px;
+    font-size: 22px; color: var(--green);
+  }
+  .option-btn.wrong { background: #e8d4d4; border-color: var(--red); color: var(--red); }
+  .option-btn.wrong::after {
+    content: '✕'; position: absolute; top: 8px; right: 12px;
+    font-size: 22px; color: var(--red);
+  }
+  .option-btn:disabled { cursor: default; }
+  .feedback {
+    margin-top: 15px; padding: 15px 20px; border-radius: 4px;
+    font-family: 'Caveat', cursive; font-size: 26px;
+    display: none; text-align: center;
+  }
+  .feedback.show { display: block; animation: pop 0.4s ease; }
+  .feedback.correct { background: #d4e8d4; color: #2d4d2d; border-left: 4px solid var(--green); }
+  .feedback.wrong { background: #e8d4d4; color: var(--red); border-left: 4px solid var(--red); }
+  @keyframes pop {
+    0% { transform: scale(0.9); opacity: 0; }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .polaroid {
+    background: var(--white); padding: 14px 14px 50px 14px;
+    box-shadow: 0 3px 6px rgba(74,55,40,0.2), 0 12px 30px rgba(74,55,40,0.25);
+    display: inline-block; position: relative;
+    transform: rotate(-2deg); transition: transform 0.3s;
+    border-radius: 2px; max-width: 260px;
+  }
+  .polaroid:hover { transform: rotate(0deg) scale(1.03); }
+  .polaroid img {
+    width: 100%; display: block;
+    filter: sepia(0.1) contrast(1.05); border-radius: 1px;
+  }
+  .polaroid .caption {
+    font-family: 'Kalam', cursive; font-size: 15px;
+    color: var(--brown); text-align: center;
+    position: absolute; bottom: 15px;
+    left: 0; right: 0; padding: 0 10px;
+  }
+  .hero {
+    display: grid; grid-template-columns: 1fr 280px;
+    gap: 30px; align-items: center; margin: 25px 0;
+  }
+  @media (max-width: 600px) { .hero { grid-template-columns: 1fr; text-align: center; } }
+  .hero .polaroid { transform: rotate(4deg); }
+  .word-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px; margin: 20px 0;
+  }
+  .word-sticker {
+    padding: 14px 12px; background: var(--white);
+    border: 2px solid var(--sepia); border-radius: 4px;
+    text-align: center; font-family: 'Special Elite', monospace;
+    font-size: 14px; color: var(--brown);
+    cursor: pointer; transition: all 0.25s;
+    box-shadow: 2px 2px 0 var(--beige); transform: rotate(-1deg);
+  }
+  .word-sticker:nth-child(2n) { transform: rotate(1.5deg); background: #faf4e8; }
+  .word-sticker:nth-child(3n) { background: #f0e8d8; }
+  .word-sticker:nth-child(5n) { transform: rotate(-2deg); background: #ebe2d3; }
+  .word-sticker:hover {
+    transform: rotate(0deg) scale(1.06);
+    box-shadow: 3px 4px 0 var(--sepia); z-index: 2;
+  }
+  .word-sticker .translation {
+    display: block; font-family: 'Caveat', cursive;
+    font-size: 20px; color: var(--red);
+    margin-top: 6px; opacity: 0; transition: opacity 0.3s;
+  }
+  .word-sticker.revealed .translation { opacity: 1; }
+  .bio {
+    display: grid; grid-template-columns: 260px 1fr;
+    gap: 25px; align-items: start; margin: 30px 0;
+    padding: 20px; background: var(--cream);
+    border-radius: 4px; position: relative;
+  }
+  @media (max-width: 600px) { .bio { grid-template-columns: 1fr; } }
+  .bio:nth-child(odd) { transform: rotate(-0.4deg); }
+  .bio:nth-child(even) { transform: rotate(0.4deg); }
+  .bio .polaroid { width: 100%; max-width: 260px; }
+  .bio-text { font-size: 17px; line-height: 1.75; color: #2d2418; }
+  .bio-text strong {
+    font-family: 'Special Elite', monospace;
+    font-weight: 700; color: var(--brown);
+    background: linear-gradient(transparent 60%, rgba(217,200,169,0.7) 60%);
+    padding: 0 3px;
+  }
+  .bio-title {
+    font-family: 'Caveat', cursive; font-size: 32px;
+    color: var(--brown); margin-bottom: 4px; line-height: 1;
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  }
+  .bio-role {
+    font-family: 'Special Elite', monospace; font-size: 11px;
+    color: var(--sepia-dark); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .speak-btn {
+    background: var(--cream); border: 2px solid var(--sepia);
+    border-radius: 50%; width: 38px; height: 38px;
+    font-size: 16px; cursor: pointer; transition: all 0.2s;
+    display: inline-flex; align-items: center;
+    justify-content: center; padding: 0;
+  }
+  .speak-btn:hover { background: var(--beige); transform: scale(1.08); }
+  .speak-btn.playing {
+    background: var(--red); color: #fff;
+    border-color: var(--brown);
+    animation: pulseSound 1s infinite;
+  }
+  @keyframes pulseSound {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(139,47,47,0.5); }
+    50% { box-shadow: 0 0 0 10px rgba(139,47,47,0); }
+  }
+  .bio-text .sentence {
+    display: inline; padding: 2px 3px;
+    border-radius: 3px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .bio-text .sentence.highlighted {
+    background: #fef3c7; color: #78350f;
+    box-shadow: 0 0 0 3px #fef3c7;
+  }
+  .bio-text .sentence.read { background: transparent; opacity: 0.85; }
+  .match-game {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 30px; margin: 25px 0; padding: 25px;
+    background: var(--cream); border: 1px solid var(--sepia);
+    border-radius: 4px; position: relative;
+  }
+  .match-game::before {
+    content: ''; position: absolute; top: -10px; left: 30px;
+    width: 80px; height: 22px;
+    background: repeating-linear-gradient(45deg, rgba(166,124,82,0.75) 0 5px, rgba(217,200,169,0.9) 5px 10px);
+    transform: rotate(-4deg);
+  }
+  @media (max-width: 600px) { .match-game { gap: 15px; padding: 15px; } }
+  .match-column { display: flex; flex-direction: column; gap: 12px; }
+  .match-card {
+    background: var(--white); border: 2px solid var(--sepia);
+    border-radius: 4px; padding: 16px 18px;
+    font-family: 'Special Elite', monospace;
+    font-size: 15px; color: var(--brown);
+    cursor: pointer; transition: all 0.25s;
+    text-align: center; box-shadow: 2px 2px 0 var(--beige);
+    user-select: none; position: relative;
+  }
+  .match-card:hover:not(.matched) {
+    background: var(--beige); transform: translateY(-2px);
+    box-shadow: 3px 4px 0 var(--sepia);
+  }
+  .match-card.selected {
+    background: #fef3c7; border-color: #d97706;
+    transform: scale(1.04);
+    box-shadow: 0 0 0 4px rgba(217,119,6,0.2);
+  }
+  .match-card.matched {
+    cursor: default; color: #fff; font-weight: 700;
+    border-color: transparent; animation: matchPulse 0.5s ease;
+  }
+  .match-card.matched[data-color="0"] { background: #4a7a4a; }
+  .match-card.matched[data-color="1"] { background: #2c7a8c; }
+  .match-card.matched[data-color="2"] { background: #b04a7a; }
+  .match-card.matched[data-color="3"] { background: #c77a2c; }
+  .match-card.matched[data-color="4"] { background: #6b4a9c; }
+  .match-card.matched[data-color="5"] { background: #2c8c7a; }
+  @keyframes matchPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  .match-card.wrong {
+    background: #fecaca; border-color: var(--red);
+    animation: shake 0.4s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+  .match-card.matched::after {
+    content: '✓'; position: absolute;
+    top: 50%; right: 12px; transform: translateY(-50%);
+    font-size: 18px; color: #fff;
+  }
+  .practice-header {
+    margin: 35px 0 15px; padding-top: 25px;
+    border-top: 2px dashed var(--sepia);
+  }
+  .practice-header h3 {
+    font-family: 'Caveat', cursive; font-size: 32px;
+    color: var(--brown); margin-bottom: 5px;
+  }
+  .practice-hint {
+    font-size: 16px; color: var(--sepia-dark); font-style: italic;
+  }
+  .practice-controls {
+    display: flex; gap: 12px; justify-content: center;
+    margin: 15px 0; flex-wrap: wrap;
+  }
+  .btn-secondary {
+    background: var(--cream); color: var(--brown);
+    border: 2px solid var(--sepia);
+    padding: 10px 20px; border-radius: 4px;
+    font-family: 'Special Elite', monospace;
+    font-size: 13px; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 2px 2px 0 var(--beige);
+  }
+  .btn-secondary:hover {
+    background: var(--beige); transform: translateY(-1px);
+    box-shadow: 3px 3px 0 var(--sepia);
+  }
+  .reminder {
+    margin: 25px 0; border: 2px solid var(--sepia);
+    border-radius: 4px; overflow: hidden;
+    background: var(--white); box-shadow: 3px 3px 0 var(--beige);
+  }
+  .reminder-toggle {
+    display: flex; align-items: center; gap: 12px;
+    width: 100%; background: var(--beige); border: none;
+    padding: 16px 20px; font-family: 'Special Elite', monospace;
+    font-size: 15px; color: var(--brown);
+    cursor: pointer; text-align: left;
+    letter-spacing: 1px; transition: background 0.2s;
+  }
+  .reminder-toggle:hover { background: #e0d5bf; }
+  .reminder-icon { font-size: 22px; }
+  .reminder-arrow {
+    margin-left: auto; font-size: 14px;
+    transition: transform 0.3s;
+  }
+  .reminder.open .reminder-arrow { transform: rotate(180deg); }
+  .reminder-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.3s;
+    padding: 0 22px; background: var(--white);
+  }
+  .reminder.open .reminder-body {
+    max-height: 3000px; padding: 22px;
+    border-top: 1px dashed var(--sepia);
+  }
+  .reminder-section {
+    margin-bottom: 20px; padding-bottom: 15px;
+    border-bottom: 1px dotted var(--sepia);
+  }
+  .reminder-section:last-of-type { border-bottom: none; }
+  .reminder-section h4 {
+    font-family: 'Caveat', cursive; font-size: 26px;
+    color: var(--brown); margin-bottom: 8px;
+  }
+  .reminder-section p { font-size: 16px; margin-bottom: 6px; }
+  .reminder-section ul {
+    margin: 8px 0 8px 24px; font-size: 16px; line-height: 1.7;
+  }
+  .reminder-section code {
+    font-family: 'Special Elite', monospace;
+    background: var(--beige); padding: 2px 6px;
+    border-radius: 3px; font-size: 15px;
+  }
+  .formula {
+    font-family: 'Special Elite', monospace;
+    background: var(--cream); padding: 8px 14px;
+    border-left: 3px solid var(--sepia);
+    font-size: 15px; color: var(--brown);
+    display: inline-block; margin-bottom: 8px;
+  }
+  .example {
+    font-family: 'Crimson Text', serif;
+    font-style: italic; color: #4a3728;
+    font-size: 17px; margin: 4px 0;
+  }
+  .example.small { font-size: 15px; color: var(--sepia-dark); }
+  .reminder-warning {
+    background: #fff8e1; border-left: 4px solid #d97706;
+    padding: 14px 18px; border-radius: 4px;
+    font-size: 15px; line-height: 1.6;
+    color: #78350f; margin-top: 15px;
+  }
+  .reminder-warning s { color: var(--red); }
+  .irregular-table {
+    width: 100%; border-collapse: collapse;
+    margin: 15px 0; font-family: 'Crimson Text', serif;
+    font-size: 16px; background: var(--white);
+    border: 1px solid var(--sepia); border-radius: 4px;
+    overflow: hidden;
+  }
+  .irregular-table thead { background: var(--brown); color: var(--cream); }
+  .irregular-table th {
+    padding: 12px 15px; text-align: left;
+    font-family: 'Special Elite', monospace;
+    font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .irregular-table td {
+    padding: 10px 15px;
+    border-bottom: 1px dotted var(--sepia);
+    color: var(--brown);
+  }
+  .irregular-table td:nth-child(2) { font-weight: 700; color: var(--red); }
+  .irregular-table td:last-child { text-align: center; width: 60px; }
+  .irregular-table tr:last-child td { border-bottom: none; }
+  .irregular-table tr:nth-child(even) { background: var(--cream); }
+  .irregular-table tr:hover { background: var(--beige); }
+  .speak-verb {
+    background: var(--cream); border: 1px solid var(--sepia);
+    border-radius: 50%; width: 32px; height: 32px;
+    font-size: 14px; cursor: pointer;
+    transition: all 0.2s; padding: 0;
+  }
+  .speak-verb:hover { background: var(--beige); transform: scale(1.1); }
+  .irregular-note {
+    background: #fff8e1; border-left: 4px solid #d97706;
+    padding: 14px 18px; border-radius: 4px;
+    font-size: 15px; line-height: 1.6;
+    color: #78350f; margin-top: 15px;
+  }
+  .irregular-note code {
+    font-family: 'Special Elite', monospace;
+    background: var(--beige); padding: 2px 6px; border-radius: 3px;
+  }
+  .ps-item {
+    background: var(--white); border: 1px solid var(--sepia);
+    border-radius: 4px; padding: 18px 22px;
+    margin: 12px 0; font-size: 17px;
+    line-height: 1.9; color: #2d2418;
+    position: relative; transition: all 0.3s;
+  }
+  .ps-item::before {
+    content: attr(data-num); font-family: 'Special Elite', monospace;
+    font-size: 13px; color: var(--sepia-dark);
+    position: absolute; top: 6px; left: 8px; opacity: 0.6;
+  }
+  .ps-item.correct { background: #d4e8d4; border-color: var(--green); }
+  .ps-item.wrong { background: #e8d4d4; border-color: var(--red); }
+  .ps-input {
+    display: inline-block; border: none;
+    border-bottom: 2px solid var(--sepia);
+    background: transparent; padding: 4px 10px;
+    margin: 0 6px; font-family: 'Special Elite', monospace;
+    font-size: 16px; color: var(--brown);
+    text-align: center; outline: none;
+    min-width: 130px; transition: all 0.25s;
+    border-radius: 3px 3px 0 0;
+  }
+  .ps-input:focus {
+    background: var(--cream); border-bottom-color: var(--brown);
+    min-width: 150px;
+  }
+  .ps-input.correct {
+    background: #d4e8d4; border-bottom-color: var(--green);
+    color: #2d4d2d; font-weight: 700;
+  }
+  .ps-input.wrong {
+    background: #e8d4d4; border-bottom-color: var(--red);
+    color: var(--red); text-decoration: line-through;
+  }
+  .ps-input:disabled { cursor: default; }
+  .ps-hint {
+    font-family: 'Special Elite', monospace;
+    font-size: 14px;
+    color: var(--sepia-dark);
+    font-style: italic;
+    margin-left: 8px;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+  .ps-correct-hint {
+    font-family: 'Special Elite', monospace;
+    font-size: 14px; color: var(--green);
+    font-weight: 700; margin-left: 4px; margin-right: 8px;
+  }
+  .ps-short-answer {
+    display: block; margin-top: 10px;
+    font-style: italic; font-size: 15px;
+    color: var(--sepia-dark); opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .ps-item.answered .ps-short-answer { opacity: 1; }
+  .ps-counter {
+    text-align: center; font-family: 'Caveat', cursive;
+    font-size: 26px; color: var(--brown);
+    margin: 20px 0; padding: 12px;
+    background: var(--cream); border-radius: 4px;
+  }
+  .phrase-card {
+    background: var(--beige); border-left: 4px solid var(--sepia);
+    padding: 14px 20px; margin: 10px 0;
+    font-family: 'Kalam', cursive;
+    font-size: 20px; color: var(--brown);
+    transform: rotate(-0.5deg);
+  }
+  .record-btn {
+    background: var(--red); color: var(--white);
+    border: none; padding: 16px 36px;
+    border-radius: 4px; font-family: 'Special Elite', monospace;
+    font-size: 15px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer;
+    margin-top: 15px; box-shadow: 3px 3px 0 var(--brown);
+  }
+  .record-btn.recording { background: var(--green); animation: pulse 1.2s infinite; }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  audio { width: 100%; margin-top: 15px; }
+  .result-card {
+    text-align: center; padding: 40px 25px;
+    background: var(--cream); border: 2px dashed var(--sepia);
+    border-radius: 4px; position: relative;
+  }
+  .result-score {
+    font-family: 'Caveat', cursive; font-size: 90px;
+    color: var(--brown); line-height: 1; margin: 15px 0;
+  }
+  .result-msg {
+    font-family: 'Kalam', cursive; font-size: 22px; color: var(--brown);
+  }
+  .result-polaroids {
+    display: flex; justify-content: center;
+    gap: 12px; flex-wrap: wrap; margin: 25px 0;
+  }
+  .result-polaroids .polaroid { width: 140px; padding: 10px 10px 34px 10px; }
+  .result-polaroids .caption { font-size: 12px; bottom: 10px; }
+  .btn {
+    background: var(--brown); color: var(--cream);
+    border: none; padding: 14px 32px;
+    border-radius: 4px; font-family: 'Special Elite', monospace;
+    font-size: 14px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer;
+    transition: all 0.25s; margin-top: 15px;
+    box-shadow: 3px 3px 0 var(--sepia);
+  }
+  .btn:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0 var(--sepia);
+    background: #3a2a1d;
+  }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .nav-buttons {
+    display: flex; justify-content: space-between;
+    align-items: center; gap: 15px;
+    margin-top: 30px; flex-wrap: wrap;
+  }
+  .btn-back {
+    background: var(--cream); color: var(--brown);
+    border: 2px solid var(--sepia);
+    box-shadow: 3px 3px 0 var(--beige);
+  }
+  .btn-back:hover {
+    background: var(--beige);
+    box-shadow: 5px 5px 0 var(--sepia);
+  }
+  .btn-back.hidden { visibility: hidden; pointer-events: none; }
+  .btn-next {
+    background: var(--red);
+    box-shadow: 3px 3px 0 var(--brown);
+    margin-left: auto;
+  }
+  .btn-next:hover { background: #7a2828; }
+  @media (max-width: 500px) {
+    .nav-buttons { flex-direction: column-reverse; }
+    .btn-next { margin-left: 0; width: 100%; }
+    .btn-back { width: 100%; }
+  }
+  .name-prompt {
+    text-align: center; padding: 20px;
+    background: var(--beige); border-radius: 4px; margin: 15px 0;
+  }
+  .name-input {
+    width: 100%; max-width: 300px;
+    padding: 12px 16px; border: 2px solid var(--sepia);
+    border-radius: 4px; font-family: 'Kalam', cursive;
+    font-size: 20px; color: var(--brown);
+    background: var(--white); text-align: center;
+    outline: none; margin-top: 10px;
+  }
+  .name-input:focus { border-color: var(--brown); }
+  .certificate {
+    background: var(--white); border: 3px double var(--sepia);
+    border-radius: 4px; padding: 40px 30px;
+    text-align: center; margin: 20px 0; position: relative;
+  }
+  .certificate::before, .certificate::after {
+    content: '★'; position: absolute;
+    font-size: 30px; color: var(--sepia);
+  }
+  .certificate::before { top: 15px; left: 20px; }
+  .certificate::after { bottom: 15px; right: 20px; }
+  .cert-title {
+    font-family: 'Caveat', cursive; font-size: 48px;
+    color: var(--brown); margin-bottom: 15px;
+  }
+  .cert-name {
+    font-family: 'Kalam', cursive; font-size: 36px;
+    color: var(--red); border-bottom: 2px solid var(--sepia);
+    display: inline-block; padding: 0 30px 5px; margin: 20px 0;
+  }
+  .cert-text {
+    font-family: 'Crimson Text', serif; font-style: italic;
+    font-size: 18px; color: var(--brown);
+    margin: 20px 0; line-height: 1.6;
+  }
+  .pdf-sentences { display: none; }
+  .pdf-comp-worksheet { display: none; }
+
+  /* ============ PRINT / PDF STYLES ============ */
+  @media print {
+    @page { size: A4; margin: 15mm; }
+    body {
+      background: #fff !important; padding: 0 !important;
+      color: #000; font-size: 11pt;
+    }
+    .container {
+      box-shadow: none !important; padding: 0 !important;
+      max-width: 100% !important; background: #fff !important;
+      border-radius: 0 !important;
+    }
+    .container::before { display: none !important; }
+    .progress-wrap, .header-actions, .sound-toggle, .pdf-btn,
+    .btn, .btn-next, .btn-back, .btn-secondary, .speak-btn,
+    .record-btn, .practice-controls, .feedback,
+    .reminder-arrow, audio, .name-prompt,
+    .speak-verb, .nav-buttons, .task-card {
+      display: none !important;
+    }
+    header {
+      padding-bottom: 10px; margin-bottom: 15px;
+      border-bottom: 2px solid #000;
+    }
+    h1 { font-size: 42pt !important; color: #000 !important; }
+    .subtitle { color: #333 !important; font-size: 10pt; }
+    .section {
+      display: block !important;
+      page-break-after: always;
+      page-break-inside: avoid;
+      animation: none !important; opacity: 1 !important;
+      transform: none !important;
+    }
+    .section:last-child { page-break-after: auto; }
+    h2 { color: #000 !important; font-size: 28pt; page-break-after: avoid; }
+    .section-label { color: #555 !important; font-size: 9pt; page-break-after: avoid; }
+    .bio {
+      display: grid !important;
+      grid-template-columns: 170px 1fr !important;
+      gap: 15px !important; margin: 15px 0 !important;
+      padding: 10px !important; background: #f9f9f9 !important;
+      border: 1px solid #ccc !important;
+      page-break-inside: avoid; transform: none !important;
+    }
+    .bio .polaroid {
+      transform: none !important; box-shadow: none !important;
+      padding: 8px 8px 30px 8px !important;
+      border: 1px solid #ccc !important; max-width: 170px !important;
+    }
+    .bio .polaroid img { filter: grayscale(0.3) !important; }
+    .bio-title { font-size: 22pt !important; color: #000 !important; }
+    .bio-role { color: #666 !important; font-size: 8pt; }
+    .bio-text { font-size: 10.5pt !important; line-height: 1.5 !important; color: #000 !important; }
+    .bio-text strong { background: none !important; color: #000 !important; text-decoration: underline; }
+    .reminder { border: 1px solid #999 !important; page-break-inside: avoid; }
+    .reminder-body {
+      max-height: 0 !important; overflow: hidden !important;
+      padding: 0 !important; border-top: none !important;
+    }
+    .reminder.open .reminder-body {
+      max-height: none !important; overflow: visible !important;
+      padding: 15px !important;
+      border-top: 1px dashed #999 !important;
+    }
+    .reminder-toggle { background: #f0f0f0 !important; color: #000 !important; }
+    #irregularReminder { display: none !important; }
+    .irregular-table {
+      border: 1px solid #000 !important; font-size: 10pt !important;
+      page-break-inside: avoid;
+    }
+    .irregular-table thead { background: #333 !important; color: #fff !important; }
+    .irregular-table td {
+      border-bottom: 1px solid #ccc !important; color: #000 !important;
+    }
+    .irregular-table td:nth-child(2) { color: #000 !important; font-weight: 700; }
+    .irregular-table td:last-child { display: none !important; }
+    .irregular-note {
+      border: 1px solid #666 !important;
+      background: #f5f5f5 !important; color: #000 !important;
+    }
+    .word-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+    }
+    .word-sticker {
+      border: 1px solid #999 !important; background: #fff !important;
+      transform: none !important; padding: 8px !important;
+      font-size: 9pt !important; box-shadow: none !important;
+    }
+    .word-sticker .translation { opacity: 1 !important; color: #000 !important; }
+    .match-game {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 20px !important; padding: 15px !important;
+      background: #fff !important; border: 1px solid #999 !important;
+      page-break-inside: avoid;
+    }
+    .match-game::before { display: none !important; }
+    .match-card {
+      border: 1px solid #999 !important; box-shadow: none !important;
+      transform: none !important; padding: 8px !important;
+      font-size: 10pt !important;
+    }
+    .match-card.selected, .match-card.wrong, .match-card.matched {
+      background: #f0f0f0 !important; color: #000 !important;
+    }
+    .match-card.matched::after { display: none !important; }
+    .ps-item {
+      border: 1px solid #ccc !important;
+      background: #f9f9f9 !important;
+      page-break-inside: avoid;
+      margin: 8px 0 !important; padding: 10px !important;
+      font-size: 10.5pt !important;
+    }
+    .ps-input {
+      border-bottom: 1px solid #000 !important;
+      background: transparent !important; color: #000 !important;
+      min-width: 140px !important;
+    }
+    .ps-input.correct {
+      background: #d4e8d4 !important;
+      border-bottom-color: #000 !important;
+      text-decoration: none !important;
+    }
+    .ps-input.wrong {
+      background: #e8d4d4 !important;
+      text-decoration: line-through !important;
+    }
+    .ps-hint { color: #555 !important; opacity: 1 !important; }
+    .ps-correct-hint { display: none !important; }
+    .ps-short-answer { opacity: 1 !important; }
+    .ps-counter { display: none !important; }
+    .phrase-card {
+      background: #f0f0f0 !important;
+      border-left: 3px solid #000 !important;
+      page-break-inside: avoid;
+      font-size: 11pt !important; color: #000 !important;
+    }
+    .result-card { border: 2px dashed #000 !important; background: #fff !important; }
+    .result-score { color: #000 !important; font-size: 60pt !important; }
+    .result-polaroids .polaroid {
+      transform: none !important;
+      border: 1px solid #999 !important;
+      box-shadow: none !important;
+    }
+    .certificate {
+      border: 3px double #000 !important;
+      page-break-inside: avoid;
+    }
+
+    /* PDF: Section 1 — Worksheet with gaps */
+    .pdf-sentences { display: block !important; page-break-inside: avoid; }
+    .pdf-sentences h3 {
+      font-family: 'Caveat', cursive !important;
+      font-size: 24pt !important;
+      color: #000 !important;
+      margin: 15px 0 10px !important;
+    }
+    .word-bank {
+      border: 2px dashed #000 !important;
+      padding: 12px 15px !important;
+      margin: 15px 0 !important;
+      font-size: 11pt !important;
+      background: #f9f9f9 !important;
+      text-align: center;
+      line-height: 1.8;
+    }
+    .fill-line {
+      display: inline-block;
+      min-width: 130px;
+      border-bottom: 1.5px solid #000;
+      height: 16px;
+      vertical-align: middle;
+      margin: 0 4px;
+    }
+    .pdf-sentence-list {
+      list-style: none; counter-reset: sentence;
+      padding: 0; margin: 0;
+    }
+    .pdf-sentence-list li {
+      counter-increment: sentence;
+      position: relative;
+      padding: 8px 10px 8px 40px;
+      margin: 8px 0; font-size: 11pt; line-height: 1.9;
+      border-bottom: 1px dotted #ccc; background: #f9f9f9;
+    }
+    .pdf-sentence-list li::before {
+      content: counter(sentence) ".";
+      position: absolute; left: 10px; top: 8px;
+      font-family: 'Special Elite', monospace;
+      font-size: 11pt; font-weight: 700; color: #333;
+    }
+
+    /* PDF: Section 4 — Comprehension worksheet */
+    .pdf-comp-worksheet {
+      display: block !important;
+      page-break-before: always;
+      page-break-inside: avoid;
+    }
+    .pdf-comp-worksheet h3 {
+      font-family: 'Caveat', cursive !important;
+      font-size: 24pt !important;
+      color: #000 !important;
+      margin-bottom: 10px;
+    }
+    .pdf-comp-worksheet > p {
+      font-size: 11pt !important;
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+    .pdf-comp-item {
+      page-break-inside: avoid;
+      margin: 15px 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+    }
+    .pdf-comp-item p {
+      font-size: 11pt !important;
+      margin-bottom: 8px !important;
+      color: #000 !important;
+      font-family: 'Crimson Text', serif !important;
+    }
+    .pdf-comp-item p strong { color: #000 !important; }
+    .pdf-comp-options {
+      display: grid !important;
+      grid-template-columns: repeat(6, 1fr) !important;
+      gap: 6px !important;
+    }
+    .pdf-comp-option {
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    .pdf-comp-option img {
+      width: 100% !important;
+      display: block !important;
+      filter: grayscale(0.5) !important;
+      border: 1px solid #999 !important;
+    }
+    .pdf-checkbox {
+      display: block !important;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid #000;
+      margin: 0 auto 4px;
+      background: #fff;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Bookworms</h1>
+    <p class="subtitle">Spotlight 7 · Module 2a · Literary Archive</p>
+    <div class="header-actions">
+      <button id="soundToggle" class="sound-toggle" onclick="toggleSound()" title="Sound on/off">🔊</button>
+      <button class="pdf-btn" onclick="printPDF()" title="Save as PDF">💾 PDF</button>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text"><span id="progressText">Page 1 of 9</span></div>
+  </div>
+
+  <!-- ============== 1. WARM-UP ============== -->
+  <section class="section active" data-section="1">
+    <h2>Are you a bookworm?</h2>
+    <span class="section-label">Warm-up · Quiz</span>
+    <div class="hero">
+      <div class="hero-text">
+        <p>A <strong>bookworm</strong> is a person who loves reading books very much.</p>
+        <p>It is a friendly word. In English we say it with a smile. 🐛📚</p>
+        <p>Are <em>you</em> a bookworm? Let's find out!</p>
+      </div>
+      <div class="polaroid">
+        <img src="worm.jpg" onerror="this.onerror=null;this.src='worm.png'" alt="Bookworm">
+        <div class="caption">The Bookworm</div>
+      </div>
+    </div>
+
+    <!-- PDF: worksheet with gaps -->
+    <div class="pdf-sentences">
+      <h3>Literary Genres — Worksheet</h3>
+      <p style="font-size:11pt;font-style:italic;">Complete the sentences with the words from the box.</p>
+
+      <div class="word-bank">
+        <strong>Word bank:</strong>
+        adventure · science fiction · drama · mystery · humorous story · biography
+      </div>
+
+      <ol class="pdf-sentence-list">
+        <li>An <span class="fill-line"></span> story is an exciting story about a hero who goes on an unusual journey and does new and dangerous things.</li>
+        <li>A <span class="fill-line"></span> story is about events that take place in the future or in space and usually describes strange creatures and robots.</li>
+        <li>A <span class="fill-line"></span> is a serious and emotional play written for the theatre, television or radio.</li>
+        <li>A <span class="fill-line"></span> is a story about a crime or a strange event that is difficult to explain.</li>
+        <li>A <span class="fill-line"></span> is a funny story with a happy ending.</li>
+        <li>A <span class="fill-line"></span> is the story of a person's life written by another person.</li>
+      </ol>
+    </div>
+
+    <div class="task-card" id="quizCard">
+      <div class="question-text" id="quizQuestion">Loading...</div>
+      <div class="options" id="quizOptions"></div>
+      <div class="feedback" id="quizFeedback"></div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back hidden" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 2. VOCABULARY ============== -->
+  <section class="section" data-section="2">
+    <h2>Literary Genres</h2>
+    <span class="section-label">Vocabulary · Learn & Practice</span>
+    <p>Click each word to see the translation and hear it. 🔈</p>
+    <div class="word-grid" id="wordGrid"></div>
+    <div class="practice-header">
+      <h3>🎯 Now practice! Match the pairs</h3>
+      <p class="practice-hint">Click a word on the left, then click its translation on the right.</p>
+    </div>
+    <div class="match-game" id="vocabMatch">
+      <div class="match-column" id="vocabLeft"></div>
+      <div class="match-column" id="vocabRight"></div>
+    </div>
+    <div class="practice-controls">
+      <button class="btn-secondary" onclick="resetVocabMatch()">🔄 Reset</button>
+      <button class="btn-secondary" onclick="shuffleVocabMatch()">🔀 Shuffle again</button>
+    </div>
+    <div class="feedback" id="vocabMatchFeedback"></div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 3. READING ============== -->
+  <section class="section" data-section="3">
+    <h2>Meet the Writers</h2>
+    <span class="section-label">Reading · Three biographies</span>
+    <p>Read the three short biographies. Click 🔊 to listen. The text will be highlighted as you listen.</p>
+
+    <div class="bio">
+      <div class="polaroid">
+        <img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'" alt="Agatha Christie">
+        <div class="caption">Agatha C. — Greenway</div>
+      </div>
+      <div>
+        <div class="bio-title">
+          Agatha Christie
+          <button class="speak-btn" onclick="speakBio('christie', this)" title="Listen">🔊</button>
+        </div>
+        <div class="bio-role">The Queen of Crime</div>
+        <div class="bio-text" id="bio-christie">
+          <span class="sentence">Who was the 'Queen of Crime'?</span>
+          <span class="sentence">Agatha Christie, of course, the world's best known mystery writer.</span>
+          <span class="sentence">Agatha Christie was born in <strong>Devon, England in 1890</strong>, and she created many fictional detectives.</span>
+          <span class="sentence">The most famous are <strong>Hercule Poirot</strong> and <strong>Miss Marple</strong>.</span>
+          <span class="sentence">Hercule Poirot is a Belgian detective, famous for his neat appearance, his obsession with order and his use of psychology in his investigations of crimes.</span>
+          <span class="sentence">Miss Marple, on the other hand, is nothing like a typical detective.</span>
+          <span class="sentence">At first glance she is an ordinary old lady who loves knitting and gossip but she can solve the hardest of mysteries and puts many criminals behind bars!</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio">
+      <div class="polaroid">
+        <img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'" alt="Sherlock Holmes">
+        <div class="caption">221B Baker St.</div>
+      </div>
+      <div>
+        <div class="bio-title">
+          Arthur Conan Doyle
+          <button class="speak-btn" onclick="speakBio('doyle', this)" title="Listen">🔊</button>
+        </div>
+        <div class="bio-role">Creator of Sherlock Holmes</div>
+        <div class="bio-text" id="bio-doyle">
+          <span class="sentence">Sir Arthur Conan Doyle was born in <strong>Edinburgh, Scotland in 1859</strong>.</span>
+          <span class="sentence">He studied medicine at the University of Edinburgh.</span>
+          <span class="sentence">It was one of his professors that inspired him to create the most brilliant detective ever, <strong>Sherlock Holmes</strong>.</span>
+          <span class="sentence">Holmes' extraordinary powers of observation help him solve the most mysterious cases with the help of his faithful companion, <strong>Dr Watson</strong>.</span>
+          <span class="sentence">Holmes is very logical and extremely intelligent.</span>
+          <span class="sentence">He wears a cape and hat, smokes a pipe and uses a magnifying glass.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bio">
+      <div class="polaroid">
+        <img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'" alt="Jules Verne">
+        <div class="caption">Jules Verne · Amiens, 1889</div>
+      </div>
+      <div>
+        <div class="bio-title">
+          Jules Verne
+          <button class="speak-btn" onclick="speakBio('verne', this)" title="Listen">🔊</button>
+        </div>
+        <div class="bio-role">Father of Science Fiction</div>
+        <div class="bio-text" id="bio-verne">
+          <span class="sentence">Jules Verne lived in <strong>Nantes</strong> — on the west coast of France.</span>
+          <span class="sentence">He loved the sea, and when he was only 12, he tried to run away on a ship to the West Indies.</span>
+          <span class="sentence">Unfortunately for him, the sailors caught and sent him home.</span>
+          <span class="sentence">Jules had a great imagination and wrote several <strong>adventure stories</strong> and created mysterious characters like <strong>Captain Nemo</strong>.</span>
+          <span class="sentence">In <em>Twenty Thousand Leagues Under the Sea</em>, Captain Nemo travels under the sea in his submarine, the <strong>Nautilus</strong>.</span>
+          <span class="sentence">On his journeys he meets strange sea creatures and finds an underwater city.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 4. COMPREHENSION ============== -->
+  <section class="section" data-section="4">
+    <h2>Who are they?</h2>
+    <span class="section-label">Reading check · Click the right photo</span>
+    <p>The photos shuffle every question — read carefully and find the right one!</p>
+    <div class="task-card" id="compCard">
+      <div class="question-text" id="compQuestion">Loading...</div>
+      <div class="options" id="compOptions"></div>
+      <div class="feedback" id="compFeedback"></div>
+    </div>
+
+    <!-- PDF: comprehension worksheet -->
+    <div class="pdf-comp-worksheet">
+      <h3>Comprehension — Who are they?</h3>
+      <p>Tick (✓) the right photo for each question.</p>
+
+      <div class="pdf-comp-item">
+        <p><strong>1.</strong> Who wrote mystery stories about Poirot and Miss Marple?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+        </div>
+      </div>
+
+      <div class="pdf-comp-item">
+        <p><strong>2.</strong> Who has extraordinary powers of observation?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+        </div>
+      </div>
+
+      <div class="pdf-comp-item">
+        <p><strong>3.</strong> Who wrote adventure novels about Captain Nemo?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+        </div>
+      </div>
+
+      <div class="pdf-comp-item">
+        <p><strong>4.</strong> Who is a Belgian detective, famous for his neat appearance?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+        </div>
+      </div>
+
+      <div class="pdf-comp-item">
+        <p><strong>5.</strong> Who is an ordinary old lady who loves knitting?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+        </div>
+      </div>
+
+      <div class="pdf-comp-item">
+        <p><strong>6.</strong> Who travels under the sea in the submarine Nautilus?</p>
+        <div class="pdf-comp-options">
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="christie.jpg" onerror="this.onerror=null;this.src='christie.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="poirot.jpg" onerror="this.onerror=null;this.src='poirot.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="verne.jpg" onerror="this.onerror=null;this.src='verne.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="nemo.jpg" onerror="this.onerror=null;this.src='nemo.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="holmes.jpg" onerror="this.onerror=null;this.src='holmes.png'"></div>
+          <div class="pdf-comp-option"><span class="pdf-checkbox"></span><img src="marple.jpg" onerror="this.onerror=null;this.src='marple.png'"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 5. ADJECTIVES MATCH ============== -->
+  <section class="section" data-section="5">
+    <h2>Adjectives</h2>
+    <span class="section-label">Vocabulary · Match the synonyms</span>
+    <p>Click a word on the left, then click its synonym on the right.</p>
+    <div class="match-game">
+      <div class="match-column" id="adjLeft"></div>
+      <div class="match-column" id="adjRight"></div>
+    </div>
+    <div class="feedback" id="adjFeedback"></div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 6. PAST SIMPLE ============== -->
+  <section class="section" data-section="6">
+    <h2>Past Simple</h2>
+    <span class="section-label">Grammar · Practice with the texts</span>
+
+    <div class="reminder" id="reminder">
+      <button class="reminder-toggle" onclick="toggleReminder()">
+        <span class="reminder-icon">💡</span>
+        <span>Past Simple — Quick Reminder</span>
+        <span class="reminder-arrow">▼</span>
+      </button>
+      <div class="reminder-body">
+        <div class="reminder-section">
+          <h4>When to use</h4>
+          <p>Completed actions in the past.</p>
+          <p><em>Markers:</em> yesterday, last week, in 1990, two days ago.</p>
+        </div>
+        <div class="reminder-section">
+          <h4>Form</h4>
+          <p><strong>Regular verbs</strong> — add <code>-ed</code>:</p>
+          <ul>
+            <li>work → work<strong>ed</strong></li>
+            <li>play → play<strong>ed</strong></li>
+            <li>study → stud<strong>ied</strong></li>
+          </ul>
+          <p><strong>Irregular verbs</strong> — 2nd form:</p>
+          <ul>
+            <li>write → <strong>wrote</strong></li>
+            <li>go → <strong>went</strong></li>
+            <li>have → <strong>had</strong></li>
+            <li>be → <strong>was / were</strong></li>
+          </ul>
+        </div>
+        <div class="reminder-section">
+          <h4>✅ Affirmative</h4>
+          <p class="formula">Subject + V2</p>
+          <p class="example">Agatha Christie <strong>wrote</strong> many books.</p>
+        </div>
+        <div class="reminder-section">
+          <h4>❌ Negative</h4>
+          <p class="formula">Subject + didn't + V1</p>
+          <p class="example">Agatha Christie <strong>didn't write</strong> poems.</p>
+        </div>
+        <div class="reminder-section">
+          <h4>❓ Interrogative</h4>
+          <p class="formula">Did + Subject + V1?</p>
+          <p class="example"><strong>Did</strong> Agatha Christie <strong>write</strong> poems?</p>
+          <p class="example small">Yes, she did. / No, she didn't.</p>
+        </div>
+        <div class="reminder-warning">
+          ⚠️ <strong>Remember:</strong> after <em>did / didn't</em> use the <strong>infinitive</strong> (V1), not V2!<br>
+          ❌ Did she <s>wrote</s>? &nbsp; ✅ Did she <strong>write</strong>?
+        </div>
+      </div>
+    </div>
+
+    <div class="reminder" id="irregularReminder">
+      <button class="reminder-toggle" onclick="toggleIrregular()">
+        <span class="reminder-icon">📖</span>
+        <span>Irregular Verbs — Table</span>
+        <span class="reminder-arrow">▼</span>
+      </button>
+      <div class="reminder-body">
+        <p style="margin-bottom:15px;font-style:italic;color:var(--sepia-dark);">
+          Click 🔊 to hear the verb. Look here when you need to check a form.
+        </p>
+        <table class="irregular-table">
+          <thead>
+            <tr>
+              <th>Infinitive (V1)</th>
+              <th>Past Simple (V2)</th>
+              <th>🔊</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>be</td><td>was / were</td><td><button class="speak-verb" onclick="speakVerb('be, was, were')">🔊</button></td></tr>
+            <tr><td>have</td><td>had</td><td><button class="speak-verb" onclick="speakVerb('have, had')">🔊</button></td></tr>
+            <tr><td>go</td><td>went</td><td><button class="speak-verb" onclick="speakVerb('go, went')">🔊</button></td></tr>
+            <tr><td>do</td><td>did</td><td><button class="speak-verb" onclick="speakVerb('do, did')">🔊</button></td></tr>
+            <tr><td>see</td><td>saw</td><td><button class="speak-verb" onclick="speakVerb('see, saw')">🔊</button></td></tr>
+            <tr><td>take</td><td>took</td><td><button class="speak-verb" onclick="speakVerb('take, took')">🔊</button></td></tr>
+            <tr><td>come</td><td>came</td><td><button class="speak-verb" onclick="speakVerb('come, came')">🔊</button></td></tr>
+            <tr><td>get</td><td>got</td><td><button class="speak-verb" onclick="speakVerb('get, got')">🔊</button></td></tr>
+            <tr><td>make</td><td>made</td><td><button class="speak-verb" onclick="speakVerb('make, made')">🔊</button></td></tr>
+            <tr><td>know</td><td>knew</td><td><button class="speak-verb" onclick="speakVerb('know, knew')">🔊</button></td></tr>
+            <tr><td>think</td><td>thought</td><td><button class="speak-verb" onclick="speakVerb('think, thought')">🔊</button></td></tr>
+            <tr><td>say</td><td>said</td><td><button class="speak-verb" onclick="speakVerb('say, said')">🔊</button></td></tr>
+            <tr><td>read</td><td>read</td><td><button class="speak-verb" onclick="speakVerb('read, read')">🔊</button></td></tr>
+            <tr><td>eat</td><td>ate</td><td><button class="speak-verb" onclick="speakVerb('eat, ate')">🔊</button></td></tr>
+            <tr><td>write</td><td>wrote</td><td><button class="speak-verb" onclick="speakVerb('write, wrote')">🔊</button></td></tr>
+            <tr><td>meet</td><td>met</td><td><button class="speak-verb" onclick="speakVerb('meet, met')">🔊</button></td></tr>
+            <tr><td>find</td><td>found</td><td><button class="speak-verb" onclick="speakVerb('find, found')">🔊</button></td></tr>
+            <tr><td>run</td><td>ran</td><td><button class="speak-verb" onclick="speakVerb('run, ran')">🔊</button></td></tr>
+            <tr><td>catch</td><td>caught</td><td><button class="speak-verb" onclick="speakVerb('catch, caught')">🔊</button></td></tr>
+            <tr><td>send</td><td>sent</td><td><button class="speak-verb" onclick="speakVerb('send, sent')">🔊</button></td></tr>
+            <tr><td>wear</td><td>wore</td><td><button class="speak-verb" onclick="speakVerb('wear, wore')">🔊</button></td></tr>
+            <tr><td>fight</td><td>fought</td><td><button class="speak-verb" onclick="speakVerb('fight, fought')">🔊</button></td></tr>
+            <tr><td>speak</td><td>spoke</td><td><button class="speak-verb" onclick="speakVerb('speak, spoke')">🔊</button></td></tr>
+          </tbody>
+        </table>
+        <div class="irregular-note">
+          ⚠️ <strong>Remember:</strong> Regular verbs add <code>-ed</code> (work → worked).<br>
+          Irregular verbs change completely (write → wrote).
+        </div>
+      </div>
+    </div>
+
+    <p>Complete the sentences about the writers. Type the correct form of the verb in brackets. Press <strong>Enter</strong> to check.</p>
+    <div id="pastSimpleContainer"></div>
+    <button class="btn" onclick="checkPastSimple()">Check answers</button>
+    <div class="feedback" id="pastSimpleFeedback"></div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 7. SPEAKING ============== -->
+  <section class="section" data-section="7">
+    <h2>Introduce yourself</h2>
+    <span class="section-label">Speaking · Record</span>
+    <p>Imagine you are Agatha Christie. Introduce yourself. Read the phrases below — they will help you.</p>
+    <div class="phrase-card">I was born in...</div>
+    <div class="phrase-card">I am famous for...</div>
+    <div class="phrase-card">I created...</div>
+    <div class="phrase-card">My characters are...</div>
+    <button class="record-btn" id="recordBtn" onclick="toggleRecord()">🎙 Start recording</button>
+    <div id="audioPlayback"></div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============== 8. RESULTS ============== -->
+  <section class="section" data-section="8">
+    <h2>Well done!</h2>
+    <span class="section-label">Your result</span>
+    <div class="name-prompt">
+      <label for="studentName" style="font-family:'Kalam',cursive;font-size:22px;color:var(--brown);">What's your name?</label><br>
+      <input type="text" id="studentName" class="name-input" placeholder="Your name" oninput="saveName(this.value)">
+    </div>
+    <div class="result-card">
+      <p style="font-size:20px;">You completed the lesson</p>
+      <div class="result-score" id="finalScore">0%</div>
+      <p class="result-msg" id="finalMessage"></p>
+      <div class="result-polaroids" id="resultPolaroids"></div>
+      <button class="btn" onclick="location.reload()">Restart lesson</button>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="nextSection()">Get your certificate →</button>
+    </div>
+  </section>
+
+  <!-- ============== 9. CERTIFICATE ============== -->
+  <section class="section" data-section="9">
+    <h2>Certificate</h2>
+    <span class="section-label">Well done, bookworm!</span>
+    <div class="certificate">
+      <div class="cert-title">Bookworm Certificate</div>
+      <p class="cert-text">This certifies that</p>
+      <div class="cert-name" id="certName">Your Name</div>
+      <p class="cert-text">
+        has successfully completed the lesson<br>
+        <strong>«Bookworms» · Spotlight 7 · Module 2a</strong><br>
+        and is now a true bookworm! 🐛📚
+      </p>
+      <p class="cert-text" style="font-size:14px;color:var(--sepia-dark);">
+        Score: <span id="certScore">—</span> · Date: <span id="certDate">—</span>
+      </p>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn btn-back" onclick="prevSection()">← Back</button>
+      <button class="btn btn-next" onclick="printPDF()">💾 Save as PDF</button>
+    </div>
+  </section>
+</div>
+
+<script>
+// ============ SOUND ENGINE ============
+let audioCtx = null;
+let soundEnabled = true;
+let voiceEnabled = true;
+
+function initAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playTone(freq, startTime, duration, type = 'sine', volume = 0.15) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(volume, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(startTime); osc.stop(startTime + duration);
+}
+
+function playCorrect() {
+  if (!soundEnabled) return;
+  initAudio();
+  const now = audioCtx.currentTime;
+  playTone(523.25, now, 0.12);
+  playTone(659.25, now + 0.08, 0.12);
+  playTone(783.99, now + 0.16, 0.25);
+}
+
+function playWrong() {
+  if (!soundEnabled) return;
+  initAudio();
+  const now = audioCtx.currentTime;
+  playTone(220, now, 0.15, 'sine', 0.08);
+  playTone(180, now + 0.1, 0.25, 'sine', 0.08);
+}
+
+function playFanfare() {
+  if (!soundEnabled) return;
+  initAudio();
+  const now = audioCtx.currentTime;
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => playTone(f, now + i * 0.12, 0.18, 'triangle', 0.12));
+}
+
+function playClickSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine'; osc.frequency.value = 600;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.05, now + 0.005);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(now); osc.stop(now + 0.06);
+}
+
+function playQuestionSound() {
+  if (!soundEnabled) return;
+  initAudio();
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(400, now);
+  osc.frequency.exponentialRampToValueAtTime(900, now + 0.15);
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(0.08, now + 0.03);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(now); osc.stop(now + 0.2);
+}
+
+document.addEventListener('click', initAudio, { once: true });
+
+// ============ VOICE ============
+const PRAISE = ["Well done!", "Excellent!", "Perfect!", "Great job!", "That's right!", "Brilliant!", "Fantastic!"];
+const ENCOURAGE = ["Almost! Try again.", "Not quite. Look again.", "Close! Keep trying."];
+
+function speakPhrase(text, lang = 'en-GB', rate = 0.9) {
+  if (!soundEnabled || !voiceEnabled || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang; u.rate = rate; u.pitch = 1.1;
+  window.speechSynthesis.speak(u);
+}
+
+function sayPraise() {
+  const p = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+  setTimeout(() => speakPhrase(p), 350);
+}
+
+function sayEncourage() {
+  const p = ENCOURAGE[Math.floor(Math.random() * ENCOURAGE.length)];
+  setTimeout(() => speakPhrase(p), 350);
+}
+
+function feedbackCorrect() { playCorrect(); sayPraise(); }
+function feedbackWrong() { playWrong(); sayEncourage(); }
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  voiceEnabled = soundEnabled;
+  const btn = document.getElementById('soundToggle');
+  btn.textContent = soundEnabled ? '🔊' : '🔇';
+  btn.classList.toggle('muted', !soundEnabled);
+  if (!soundEnabled && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+// ============ NAV ============
+let currentSection = 1;
+const totalSections = 9;
+let scores = { quiz: 0, comp: 0, adj: 0, fill: 0 };
+let matchedVocab = 0, matchedAdj = 0;
+const totalVocabPairs = 10, totalAdjPairs = 6;
+
+function nextSection() {
+  stopAllReading();
+  if (soundEnabled && currentSection < totalSections) playFanfare();
+  if (currentSection === 5) scores.adj = Math.round((matchedAdj / totalAdjPairs) * 100);
+  if (currentSection === 6) scores.fill = Math.round((psCorrect / psTotal) * 100);
+
+  document.querySelector(`[data-section="${currentSection}"]`).classList.remove('active');
+  currentSection++;
+  if (currentSection > totalSections) currentSection = totalSections;
+  document.querySelector(`[data-section="${currentSection}"]`).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (currentSection === 8) showFinal();
+}
+
+function prevSection() {
+  stopAllReading();
+  if (soundEnabled && currentSection > 1) playFanfare();
+  document.querySelector(`[data-section="${currentSection}"]`).classList.remove('active');
+  currentSection--;
+  if (currentSection < 1) currentSection = 1;
+  document.querySelector(`[data-section="${currentSection}"]`).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  const pct = ((currentSection - 1) / (totalSections - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Page ${currentSection} of ${totalSections}`;
+}
+
+// ============ SECTION 1: QUIZ ============
+const quizQuestions = [
+  { q: "A ___ story is an exciting story about a hero who goes on an unusual journey.", options: ["comedy", "adventure"], correct: 1 },
+  { q: "A ___ story describes strange creatures and robots in the future.", options: ["science fiction", "biography"], correct: 0 },
+  { q: "A ___ is a serious and emotional play for the theatre.", options: ["drama", "legend"], correct: 0 },
+  { q: "A ___ is a story about a crime or a strange event difficult to explain.", options: ["mystery", "novel"], correct: 0 },
+  { q: "A ___ is a funny story with a happy ending.", options: ["humorous story", "history"], correct: 0 },
+  { q: "A ___ is the story of a person's life written by another person.", options: ["novel", "biography"], correct: 1 }
+];
+let quizIndex = 0, quizCorrect = 0;
+
+function renderQuiz() {
+  const q = quizQuestions[quizIndex];
+  document.getElementById('quizQuestion').textContent = `${quizIndex + 1}. ${q.q}`;
+  const opts = document.getElementById('quizOptions');
+  opts.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.textContent = opt;
+    btn.onclick = () => answerQuiz(i, btn);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizFeedback').className = 'feedback';
+}
+
+function answerQuiz(i, btn) {
+  const q = quizQuestions[quizIndex];
+  const all = document.querySelectorAll('#quizOptions .option-btn');
+  all.forEach(b => b.disabled = true);
+  const fb = document.getElementById('quizFeedback');
+  if (i === q.correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ Correct!';
+    fb.className = 'feedback show correct';
+    quizCorrect++;
+    feedbackCorrect();
+  } else {
+    btn.classList.add('wrong');
+    all[q.correct].classList.add('correct');
+    fb.textContent = 'Almost! The right answer is highlighted.';
+    fb.className = 'feedback show wrong';
+    feedbackWrong();
+  }
+  setTimeout(() => {
+    quizIndex++;
+    if (quizIndex < quizQuestions.length) renderQuiz();
+    else {
+      scores.quiz = Math.round((quizCorrect / quizQuestions.length) * 100);
+      document.getElementById('quizQuestion').textContent = `🎉 You answered ${quizCorrect} of ${quizQuestions.length} correctly!`;
+      document.getElementById('quizOptions').innerHTML = '';
+      document.getElementById('quizFeedback').className = 'feedback';
+    }
+  }, 1700);
+}
+
+// ============ SECTION 2: VOCABULARY ============
+const vocab = [
+  { word: 'adventure', ru: 'приключение' },
+  { word: 'mystery', ru: 'таинственная история' },
+  { word: 'science fiction', ru: 'фантастика' },
+  { word: 'drama', ru: 'драма' },
+  { word: 'comedy', ru: 'комедия' },
+  { word: 'biography', ru: 'биография' },
+  { word: 'legend', ru: 'легенда' },
+  { word: 'novel', ru: 'роман' },
+  { word: 'detective', ru: 'детектив' },
+  { word: 'bookworm', ru: 'книголюб' }
+];
+
+function buildVocab() {
+  const grid = document.getElementById('wordGrid');
+  grid.innerHTML = '';
+  vocab.forEach(v => {
+    const el = document.createElement('div');
+    el.className = 'word-sticker';
+    el.innerHTML = `<span>${v.word}</span><span class="translation">${v.ru}</span>`;
+    el.onclick = () => {
+      el.classList.toggle('revealed');
+      if (soundEnabled) speakPhrase(v.word, 'en-GB', 0.9);
+    };
+    grid.appendChild(el);
+  });
+}
+
+let vocabSelectedLeft = null, vocabSelectedRight = null;
+
+function buildVocabMatch() {
+  const left = document.getElementById('vocabLeft');
+  const right = document.getElementById('vocabRight');
+  left.innerHTML = ''; right.innerHTML = '';
+  vocabSelectedLeft = null; vocabSelectedRight = null;
+
+  vocab.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = p.word;
+    card.dataset.id = i;
+    card.dataset.side = 'left';
+    card.onclick = () => handleVocabClick(card, 'left');
+    left.appendChild(card);
+  });
+
+  const shuffled = [...vocab].sort(() => Math.random() - 0.5);
+  shuffled.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = p.ru;
+    card.dataset.id = vocab.findIndex(x => x.ru === p.ru);
+    card.dataset.side = 'right';
+    card.onclick = () => handleVocabClick(card, 'right');
+    right.appendChild(card);
+  });
+}
+
+function handleVocabClick(card, side) {
+  if (card.classList.contains('matched') || card.classList.contains('wrong')) return;
+  if (side === 'left') {
+    if (vocabSelectedLeft) vocabSelectedLeft.classList.remove('selected');
+    if (vocabSelectedLeft === card) { vocabSelectedLeft = null; return; }
+    vocabSelectedLeft = card;
+    card.classList.add('selected');
+    playClickSound();
+  } else {
+    if (vocabSelectedRight) vocabSelectedRight.classList.remove('selected');
+    if (vocabSelectedRight === card) { vocabSelectedRight = null; return; }
+    vocabSelectedRight = card;
+    card.classList.add('selected');
+    playClickSound();
+  }
+  if (vocabSelectedLeft && vocabSelectedRight) checkVocabPair();
+}
+
+function checkVocabPair() {
+  const l = vocabSelectedLeft, r = vocabSelectedRight;
+  if (l.dataset.id === r.dataset.id) {
+    l.classList.remove('selected'); r.classList.remove('selected');
+    l.classList.add('matched'); r.classList.add('matched');
+    l.dataset.color = l.dataset.id % 6;
+    r.dataset.color = l.dataset.id % 6;
+    feedbackCorrect();
+    matchedVocab++;
+    const fb = document.getElementById('vocabMatchFeedback');
+    fb.textContent = `${matchedVocab} of ${totalVocabPairs} matched!`;
+    fb.className = 'feedback show correct';
+    if (matchedVocab === totalVocabPairs) {
+      setTimeout(() => { playFanfare(); speakPhrase("Perfect! All matched!"); }, 600);
+    }
+  } else {
+    l.classList.remove('selected'); r.classList.remove('selected');
+    l.classList.add('wrong'); r.classList.add('wrong');
+    feedbackWrong();
+    setTimeout(() => { l.classList.remove('wrong'); r.classList.remove('wrong'); }, 600);
+  }
+  vocabSelectedLeft = null; vocabSelectedRight = null;
+}
+
+function resetVocabMatch() {
+  matchedVocab = 0;
+  document.getElementById('vocabMatchFeedback').className = 'feedback';
+  buildVocabMatch();
+}
+
+function shuffleVocabMatch() {
+  const right = document.getElementById('vocabRight');
+  document.querySelectorAll('#vocabLeft .match-card').forEach(c => {
+    c.classList.remove('matched', 'selected', 'wrong');
+    c.dataset.color = '';
+  });
+  right.innerHTML = '';
+  vocabSelectedLeft = null; vocabSelectedRight = null;
+  const shuffled = [...vocab].sort(() => Math.random() - 0.5);
+  shuffled.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = p.ru;
+    card.dataset.id = vocab.findIndex(x => x.ru === p.ru);
+    card.dataset.side = 'right';
+    card.onclick = () => handleVocabClick(card, 'right');
+    right.appendChild(card);
+  });
+}
+
+// ============ SECTION 3: KARAOKE ============
+let currentUtterance = null;
+let currentSentences = [];
+let currentSentenceIndex = 0;
+let isReading = false;
+let currentSpeakBtn = null;
+
+function speakBio(bioId, btn) {
+  const container = document.getElementById(`bio-${bioId}`);
+  if (!container) return;
+  if (isReading && currentSpeakBtn === btn) { stopAllReading(); return; }
+  if (isReading) stopAllReading();
+  currentSentences = Array.from(container.querySelectorAll('.sentence'));
+  if (currentSentences.length === 0) return;
+  currentSentenceIndex = 0;
+  isReading = true;
+  currentSpeakBtn = btn;
+  btn.textContent = '⏸';
+  btn.classList.add('playing');
+  currentSentences.forEach(s => s.classList.remove('highlighted', 'read'));
+  readNextSentence();
+}
+
+function readNextSentence() {
+  if (!isReading) return;
+  if (currentSentenceIndex >= currentSentences.length) { finishReading(); return; }
+  currentSentences.forEach(s => s.classList.remove('highlighted'));
+  const sentence = currentSentences[currentSentenceIndex];
+  sentence.classList.add('highlighted');
+  sentence.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const u = new SpeechSynthesisUtterance(sentence.textContent.trim());
+  u.lang = 'en-GB'; u.rate = 0.85; u.pitch = 1.05;
+  u.onend = () => {
+    if (!isReading) return;
+    sentence.classList.remove('highlighted');
+    sentence.classList.add('read');
+    currentSentenceIndex++;
+    setTimeout(readNextSentence, 250);
+  };
+  u.onerror = () => {
+    if (!isReading) return;
+    currentSentenceIndex++;
+    setTimeout(readNextSentence, 250);
+  };
+  currentUtterance = u;
+  window.speechSynthesis.speak(u);
+}
+
+function stopAllReading() {
+  if (isReading) {
+    isReading = false;
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    currentSentences.forEach(s => s.classList.remove('highlighted'));
+    if (currentSpeakBtn) {
+      currentSpeakBtn.textContent = '🔊';
+      currentSpeakBtn.classList.remove('playing');
+    }
+  }
+  currentUtterance = null; currentSentences = []; currentSpeakBtn = null;
+}
+
+function finishReading() {
+  isReading = false;
+  if (currentSpeakBtn) {
+    currentSpeakBtn.textContent = '🔊';
+    currentSpeakBtn.classList.remove('playing');
+  }
+  const sents = currentSentences;
+  setTimeout(() => sents.forEach(s => s.classList.remove('read', 'highlighted')), 2000);
+  currentUtterance = null; currentSpeakBtn = null;
+}
+
+// ============ SECTION 4: COMPREHENSION ============
+const compQuestions = [
+  { q: "Who wrote mystery stories about Poirot and Miss Marple?", correct: 'christie', name: 'Agatha Christie' },
+  { q: "Who has extraordinary powers of observation?", correct: 'holmes', name: 'Sherlock Holmes' },
+  { q: "Who wrote adventure novels about Captain Nemo?", correct: 'verne', name: 'Jules Verne' },
+  { q: "Who is a Belgian detective, famous for his neat appearance?", correct: 'poirot', name: 'Hercule Poirot' },
+  { q: "Who is an ordinary old lady who loves knitting?", correct: 'marple', name: 'Miss Marple' },
+  { q: "Who travels under the sea in the submarine Nautilus?", correct: 'nemo', name: 'Captain Nemo' }
+];
+let compIndex = 0, compCorrect = 0;
+
+function renderComp() {
+  const q = compQuestions[compIndex];
+  const opts = document.getElementById('compOptions');
+  playQuestionSound();
+  opts.style.transition = 'opacity 0.3s, transform 0.3s';
+  opts.style.opacity = '0';
+  opts.style.transform = 'translateY(20px)';
+
+  setTimeout(() => {
+    document.getElementById('compQuestion').textContent = q.q;
+    opts.innerHTML = '';
+    opts.style.gridTemplateColumns = 'repeat(2, 1fr)';
+    const all = ['christie', 'holmes', 'verne', 'poirot', 'marple', 'nemo'];
+    const shuffled = [...all].sort(() => Math.random() - 0.5);
+
+    shuffled.forEach((name, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.style.padding = '6px';
+      btn.style.opacity = '0';
+      btn.style.transform = 'scale(0.8)';
+      btn.style.transition = 'opacity 0.3s, transform 0.3s';
+      btn.style.transitionDelay = `${i * 0.06}s`;
+      const img = document.createElement('img');
+      img.src = `${name}.jpg`;
+      img.onerror = function() { this.onerror = null; this.src = `${name}.png`; };
+      img.alt = name;
+      img.style.cssText = 'width:100%;display:block;border-radius:2px;filter:sepia(0.1);';
+      btn.appendChild(img);
+      btn.onclick = () => answerComp(name, btn);
+      opts.appendChild(btn);
+    });
+
+    setTimeout(() => {
+      opts.style.opacity = '1';
+      opts.style.transform = 'translateY(0)';
+      opts.querySelectorAll('.option-btn').forEach(b => {
+        b.style.opacity = '1';
+        b.style.transform = 'scale(1)';
+      });
+    }, 50);
+    document.getElementById('compFeedback').className = 'feedback';
+  }, 300);
+}
+
+function answerComp(name, btn) {
+  const q = compQuestions[compIndex];
+  const all = document.querySelectorAll('#compOptions .option-btn');
+  all.forEach(b => b.disabled = true);
+  const fb = document.getElementById('compFeedback');
+  if (name === q.correct) {
+    btn.classList.add('correct');
+    fb.textContent = `✓ Yes! It's ${q.name}.`;
+    fb.className = 'feedback show correct';
+    compCorrect++;
+    feedbackCorrect();
+  } else {
+    btn.classList.add('wrong');
+    all.forEach(b => {
+      const img = b.querySelector('img');
+      if (img && img.src.includes(q.correct)) b.classList.add('correct');
+    });
+    fb.textContent = `Almost! The right photo is highlighted.`;
+    fb.className = 'feedback show wrong';
+    feedbackWrong();
+  }
+  setTimeout(() => {
+    compIndex++;
+    if (compIndex < compQuestions.length) renderComp();
+    else {
+      scores.comp = Math.round((compCorrect / compQuestions.length) * 100);
+      document.getElementById('compQuestion').textContent = `🎉 ${compCorrect} of ${compQuestions.length} correct!`;
+      document.getElementById('compOptions').innerHTML = '';
+      document.getElementById('compFeedback').className = 'feedback';
+    }
+  }, 1900);
+}
+
+// ============ SECTION 5: ADJECTIVES MATCH ============
+const adjPairs = [
+  { word: 'well-known', syn: 'famous' },
+  { word: 'unusual', syn: 'strange' },
+  { word: 'amazing', syn: 'wonderful' },
+  { word: 'clever', syn: 'smart' },
+  { word: 'ordinary', syn: 'usual' },
+  { word: 'loyal', syn: 'faithful' }
+];
+let adjSelectedLeft = null, adjSelectedRight = null;
+
+function buildAdjMatch() {
+  const left = document.getElementById('adjLeft');
+  const right = document.getElementById('adjRight');
+  left.innerHTML = ''; right.innerHTML = '';
+  adjSelectedLeft = null; adjSelectedRight = null;
+
+  adjPairs.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = p.word;
+    card.dataset.id = i;
+    card.dataset.side = 'left';
+    card.onclick = () => handleAdjClick(card, 'left');
+    left.appendChild(card);
+  });
+
+  const shuffled = [...adjPairs].sort(() => Math.random() - 0.5);
+  shuffled.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'match-card';
+    card.textContent = p.syn;
+    card.dataset.id = adjPairs.findIndex(x => x.syn === p.syn);
+    card.dataset.side = 'right';
+    card.onclick = () => handleAdjClick(card, 'right');
+    right.appendChild(card);
+  });
+}
+
+function handleAdjClick(card, side) {
+  if (card.classList.contains('matched') || card.classList.contains('wrong')) return;
+  if (side === 'left') {
+    if (adjSelectedLeft) adjSelectedLeft.classList.remove('selected');
+    if (adjSelectedLeft === card) { adjSelectedLeft = null; return; }
+    adjSelectedLeft = card;
+    card.classList.add('selected');
+    playClickSound();
+  } else {
+    if (adjSelectedRight) adjSelectedRight.classList.remove('selected');
+    if (adjSelectedRight === card) { adjSelectedRight = null; return; }
+    adjSelectedRight = card;
+    card.classList.add('selected');
+    playClickSound();
+  }
+  if (adjSelectedLeft && adjSelectedRight) checkAdjPair();
+}
+
+function checkAdjPair() {
+  const l = adjSelectedLeft, r = adjSelectedRight;
+  if (l.dataset.id === r.dataset.id) {
+    l.classList.remove('selected'); r.classList.remove('selected');
+    l.classList.add('matched'); r.classList.add('matched');
+    l.dataset.color = l.dataset.id % 6;
+    r.dataset.color = l.dataset.id % 6;
+    feedbackCorrect();
+    matchedAdj++;
+    const fb = document.getElementById('adjFeedback');
+    fb.textContent = `${matchedAdj} of ${totalAdjPairs} matched!`;
+    fb.className = 'feedback show correct';
+    if (matchedAdj === totalAdjPairs) {
+      setTimeout(() => { playFanfare(); speakPhrase("Perfect! All synonyms matched!"); }, 600);
+    }
+  } else {
+    l.classList.remove('selected'); r.classList.remove('selected');
+    l.classList.add('wrong'); r.classList.add('wrong');
+    feedbackWrong();
+    setTimeout(() => { l.classList.remove('wrong'); r.classList.remove('wrong'); }, 600);
+  }
+  adjSelectedLeft = null; adjSelectedRight = null;
+}
+
+// ============ SECTION 6: PAST SIMPLE — TYPING (SHUFFLED) ============
+const psItemsRaw = [
+  { text: 'Agatha Christie {0} born in Devon, England in 1890. <span class="ps-hint">(be)</span>', answers: [['was']] },
+  { text: 'She {0} many mystery stories. <span class="ps-hint">(write)</span>', answers: [['wrote']] },
+  { text: 'Agatha Christie {0} Hercule Poirot and Miss Marple. <span class="ps-hint">(create)</span>', answers: [['created']] },
+  { text: 'Arthur Conan Doyle {0} medicine at the University of Edinburgh. <span class="ps-hint">(study)</span>', answers: [['studied']] },
+  { text: 'His professor {0} him to create Sherlock Holmes. <span class="ps-hint">(inspire)</span>', answers: [['inspired']] },
+  { text: 'Sherlock Holmes {0} a cape and a hat. <span class="ps-hint">(wear)</span>', answers: [['wore']] },
+  { text: 'Jules Verne {0} the sea. <span class="ps-hint">(love)</span>', answers: [['loved']] },
+  { text: 'When he was 12, he {0} to run away on a ship. <span class="ps-hint">(try)</span>', answers: [['tried']] },
+  { text: 'The sailors {0} him and sent him home. <span class="ps-hint">(catch)</span>', answers: [['caught']] },
+  { text: 'Captain Nemo {0} under the sea in the submarine Nautilus. <span class="ps-hint">(travel)</span>', answers: [['travelled', 'traveled']] },
+  { text: 'Agatha Christie {0} poems. <span class="ps-hint">(not write)</span>', answers: [["didn't write", 'did not write']] },
+  { text: 'Miss Marple {0} like a typical detective. <span class="ps-hint">(not look)</span>', answers: [["didn't look", 'did not look']] },
+  { text: 'Sherlock Holmes {0} a wife. <span class="ps-hint">(not have)</span>', answers: [["didn't have", 'did not have']] },
+  { text: 'Jules Verne {0} to be a sailor. <span class="ps-hint">(not want)</span>', answers: [["didn't want", 'did not want']] },
+  { text: 'The sailors {0} him go to the West Indies. <span class="ps-hint">(not let)</span>', answers: [["didn't let", 'did not let']] },
+  { text: '{0} she {1} many books? <span class="ps-hint">(write)</span>', answers: [['did'], ['write']], short: 'Yes, she did.' },
+  { text: '{0} he {1} medicine? <span class="ps-hint">(study)</span>', answers: [['did'], ['study']], short: 'Yes, he did.' },
+  { text: '{0} he {1} a magnifying glass? <span class="ps-hint">(use)</span>', answers: [['did'], ['use']], short: 'Yes, he did.' },
+  { text: '{0} he {1} away on a ship? <span class="ps-hint">(run)</span>', answers: [['did'], ['run']], short: 'Yes, he did.' },
+  { text: '{0} he {1} in the Nautilus? <span class="ps-hint">(travel)</span>', answers: [['did'], ['travel']], short: 'Yes, he did.' }
+];
+
+let psItems = [];
+let psAnswered = 0;
+let psCorrect = 0;
+let psTotal = 0;
+
+function shuffleArr(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function normalize(s) {
+  return s.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function buildPastSimple() {
+  psItems = shuffleArr(psItemsRaw);
+  psTotal = psItems.length;
+  psAnswered = 0; psCorrect = 0;
+
+  const container = document.getElementById('pastSimpleContainer');
+  container.innerHTML = '';
+
+  psItems.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'ps-item';
+    div.dataset.num = idx + 1;
+    div.dataset.idx = idx;
+
+    let html = item.text;
+    item.answers.forEach((answerSet, i) => {
+      const inputHtml = `<input type="text" class="ps-input" data-idx="${idx}" data-slot="${i}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`;
+      html = html.replace(`{${i}}`, inputHtml);
+    });
+
+    if (item.short) html += `<span class="ps-short-answer">→ ${item.short}</span>`;
+    div.innerHTML = html;
+
+    div.querySelectorAll('.ps-input').forEach(inp => {
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); checkItem(idx); }
+      });
+    });
+    container.appendChild(div);
+  });
+  updatePsCounter();
+}
+
+function checkItem(idx) {
+  const item = psItems[idx];
+  const div = document.querySelector(`.ps-item[data-idx="${idx}"]`);
+  if (!div || div.classList.contains('answered')) return;
+
+  const inputs = div.querySelectorAll('.ps-input');
+  let allFilled = true, allCorrect = true;
+
+  inputs.forEach((inp, i) => {
+    const val = normalize(inp.value);
+    if (!val) { allFilled = false; return; }
+    const accepted = item.answers[i].map(a => normalize(a));
+    if (!accepted.includes(val)) allCorrect = false;
+  });
+
+  if (!allFilled) {
+    div.classList.add('wrong');
+    setTimeout(() => div.classList.remove('wrong'), 600);
+    playWrong();
+    return;
+  }
+
+  inputs.forEach((inp, i) => {
+    const val = normalize(inp.value);
+    const accepted = item.answers[i].map(a => normalize(a));
+    const ok = accepted.includes(val);
+    inp.classList.add(ok ? 'correct' : 'wrong');
+    inp.disabled = true;
+  });
+
+  if (allCorrect) {
+    div.classList.add('correct', 'answered');
+    psCorrect++;
+    feedbackCorrect();
+  } else {
+    div.classList.add('wrong', 'answered');
+    inputs.forEach((inp, i) => {
+      const val = normalize(inp.value);
+      const accepted = item.answers[i].map(a => normalize(a));
+      if (!accepted.includes(val)) {
+        const hint = document.createElement('span');
+        hint.className = 'ps-correct-hint';
+        hint.textContent = ` ✎ ${item.answers[i][0]}`;
+        inp.parentNode.insertBefore(hint, inp.nextSibling);
+      }
+    });
+    feedbackWrong();
+  }
+  psAnswered++;
+  updatePsCounter();
+}
+
+function checkPastSimple() {
+  psItems.forEach((_, idx) => {
+    const div = document.querySelector(`.ps-item[data-idx="${idx}"]`);
+    if (div && !div.classList.contains('answered')) {
+      const inputs = div.querySelectorAll('.ps-input');
+      const hasAny = Array.from(inputs).some(inp => inp.value.trim() !== '');
+      if (hasAny) checkItem(idx);
+    }
+  });
+
+  const fb = document.getElementById('pastSimpleFeedback');
+  const pct = Math.round((psCorrect / psTotal) * 100);
+  if (psAnswered < psTotal) {
+    fb.textContent = `You answered ${psAnswered} of ${psTotal}. Finish the rest first!`;
+    fb.className = 'feedback show wrong';
+    return;
+  }
+  if (pct >= 90) {
+    fb.textContent = `🏆 Perfect! ${psCorrect} of ${psTotal}!`;
+    fb.className = 'feedback show correct';
+    playFanfare();
+  } else if (pct >= 70) {
+    fb.textContent = `👍 Great! ${psCorrect} of ${psTotal}.`;
+    fb.className = 'feedback show correct';
+  } else {
+    fb.textContent = `${psCorrect} of ${psTotal}. Read the texts again and try once more.`;
+    fb.className = 'feedback show wrong';
+  }
+}
+
+function updatePsCounter() {
+  let counter = document.getElementById('psCounter');
+  if (!counter) {
+    counter = document.createElement('div');
+    counter.id = 'psCounter';
+    counter.className = 'ps-counter';
+    document.getElementById('pastSimpleContainer').appendChild(counter);
+  }
+  counter.textContent = `${psAnswered} of ${psTotal} answered · ${psCorrect} correct`;
+}
+
+// ============ SECTION 7: SPEAKING ============
+let mediaRecorder, audioChunks = [], isRecording = false;
+
+async function toggleRecord() {
+  const btn = document.getElementById('recordBtn');
+  if (!isRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const url = URL.createObjectURL(blob);
+        document.getElementById('audioPlayback').innerHTML = `<audio controls src="${url}"></audio>`;
+      };
+      mediaRecorder.start();
+      isRecording = true;
+      btn.textContent = '⏹ Stop recording';
+      btn.classList.add('recording');
+    } catch (err) {
+      alert('Microphone access denied. You can skip this step.');
+    }
+  } else {
+    mediaRecorder.stop();
+    isRecording = false;
+    btn.textContent = '🎙 Record again';
+    btn.classList.remove('recording');
+  }
+}
+
+// ============ REMINDERS ============
+function toggleReminder() {
+  const r = document.getElementById('reminder');
+  r.classList.toggle('open');
+  if (soundEnabled) playClickSound();
+  localStorage.setItem('reminderOpen', r.classList.contains('open'));
+}
+
+function toggleIrregular() {
+  const r = document.getElementById('irregularReminder');
+  r.classList.toggle('open');
+  if (soundEnabled) playClickSound();
+  localStorage.setItem('irregularOpen', r.classList.contains('open'));
+}
+
+function speakVerb(text) {
+  if (!soundEnabled) return;
+  speakPhrase(text, 'en-GB', 0.85);
+}
+
+// ============ NAME + FINAL ============
+function saveName(val) {
+  localStorage.setItem('studentName', val);
+  const certName = document.getElementById('certName');
+  if (certName) certName.textContent = val || 'Your Name';
+}
+
+function showFinal() {
+  const total = Math.round((scores.quiz + scores.comp + scores.adj + scores.fill) / 4);
+  document.getElementById('finalScore').textContent = total + '%';
+
+  let msg = '';
+  if (total >= 90) msg = '🏆 Outstanding! You are a true bookworm!';
+  else if (total >= 70) msg = '👍 Great job! Keep reading!';
+  else if (total >= 50) msg = '📖 Good start! Read the texts again.';
+  else msg = '💪 Try once more — practice makes perfect!';
+  document.getElementById('finalMessage').textContent = msg;
+
+  const pol = document.getElementById('resultPolaroids');
+  pol.innerHTML = '';
+  const stickers = [
+    { img: 'christie', cap: 'A. Christie' },
+    { img: 'holmes', cap: 'S. Holmes' },
+    { img: 'verne', cap: 'J. Verne' },
+    { img: 'poirot', cap: 'Poirot' },
+    { img: 'marple', cap: 'Miss Marple' },
+    { img: 'nemo', cap: 'Capt. Nemo' },
+    { img: 'worm', cap: 'Bookworm' }
+  ];
+  stickers.forEach(s => {
+    const el = document.createElement('div');
+    el.className = 'polaroid';
+    el.style.transform = `rotate(${(Math.random() * 6 - 3).toFixed(1)}deg)`;
+    el.innerHTML = `<img src="${s.img}.jpg" onerror="this.onerror=null;this.src='${s.img}.png'" alt="${s.cap}"><div class="caption">${s.cap}</div>`;
+    pol.appendChild(el);
+  });
+
+  const savedName = localStorage.getItem('studentName') || '';
+  document.getElementById('certName').textContent = savedName || 'Your Name';
+  document.getElementById('studentName').value = savedName;
+  document.getElementById('certScore').textContent = total + '%';
+  document.getElementById('certDate').textContent = new Date().toLocaleDateString('en-GB');
+}
+
+// ============ PDF ============
+function printPDF() {
+  stopAllReading();
+  if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+  setTimeout(() => window.print(), 200);
+}
+
+// ============ INIT ============
+renderQuiz();
+buildVocab();
+buildVocabMatch();
+renderComp();
+buildAdjMatch();
+buildPastSimple();
+updateProgress();
+
+if (localStorage.getItem('reminderOpen') === 'true') document.getElementById('reminder').classList.add('open');
+if (localStorage.getItem('irregularOpen') === 'true') document.getElementById('irregularReminder').classList.add('open');
+
+const savedName = localStorage.getItem('studentName') || '';
+if (savedName) {
+  document.getElementById('studentName').value = savedName;
+  document.getElementById('certName').textContent = savedName;
+}
+</script>
+</body>
+</html>
